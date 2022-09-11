@@ -34,7 +34,9 @@ mongoose.connect(dataBaseURL, connectParams)
 
 
 
-
+app.get('/api/demo', async (request, response) => {
+    return console.log('hello first deployed server')
+})
 
 
 // fetch latest products
