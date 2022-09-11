@@ -36,7 +36,7 @@ mongoose.connect(dataBaseURL, connectParams)
 
 // testing url
 app.get('/api/demo', async (request, response) => {
-    return response.send({ data: true })
+    return console.log('working properly')
 })
 
 
