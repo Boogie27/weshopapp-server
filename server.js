@@ -23,6 +23,17 @@ app.use(cookieParser("secret"))
 app.use(cors())
 
 
+
+
+app.get('/', async (request, response) => {
+    return response.send('hello first deployed server')
+})
+
+
+return console.log('yessss')
+
+
+
 const dataBaseURL = process.env.MONGOOSE_URI
 const connectParams = {
     useNewUrlParser: true,
@@ -33,10 +44,6 @@ mongoose.connect(dataBaseURL, connectParams)
 .catch((e) => console.log("Error: " + e))
 
 
-
-app.get('/api/demo', async (request, response) => {
-    return console.log('hello first deployed server')
-})
 
 
 // fetch latest products
