@@ -33,7 +33,6 @@ mongoose.connect(dataBaseURL, connectParams)
 .catch((e) => console.log("Error: " + e))
 
 
-app.use(express.static(path.join(__dirname, "./weshopapp/build")))
 
 
 
