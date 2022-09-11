@@ -35,7 +35,7 @@ mongoose.connect(dataBaseURL, connectParams)
 
 
 // testing url
-app.get('/', async (request, response) => {
+app.get('/demo', async (request, response) => {
     return response.send('hello first deployed server')
 })
 
