@@ -24,12 +24,12 @@ app.use(cors())
 
 
 
-// const dataBaseURL = process.env.MONGOOSE_URI
-const dataBaseURL = 'mongodb+srv://weshopapp:weshopapp123456@cluster0.lmbavfe.mongodb.net/weshopapp?retryWrites=true&w=majority'
+const dataBaseURL = process.env.MONGOOSE_URI
 const connectParams = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }
+
 mongoose.connect(dataBaseURL, connectParams)
 .then(() => console.log('Connected to MongoDB.....'))
 .catch((e) => console.log("Error: " + e))
