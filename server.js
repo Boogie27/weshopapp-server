@@ -27,7 +27,7 @@ app.use(cors())
 const dataBaseURL = process.env.MONGOOSE_URI
 const connectParams = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 }
 
 mongoose.connect(dataBaseURL, connectParams)

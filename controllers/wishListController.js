@@ -17,7 +17,7 @@ const fetchWishlist = AsyncHandler(async (request, response) => {
     if(exists){
         const items = await Wishlist.find({user: exists._id}).populate(
             'product',
-            'image product_name category' 
+            '_id image product_name category price quantity' 
         )
         if(items){
             return response.send(items)
