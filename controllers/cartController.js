@@ -50,7 +50,7 @@ const fetchCartItems = AsyncHandler(async (request, response) => {
     if(exists){
         const cartItems = await Cart.find({user: exists._id}).populate(
             'product',
-            'image product_name category' 
+            '_id image product_name category price quantity' 
         )
         if(cartItems){
             return response.send(cartItems)
