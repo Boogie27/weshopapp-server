@@ -155,10 +155,11 @@ const getUser = AsyncHandler(async (request, response) => {
 // change user theme 
 const changeUserTheme = AsyncHandler( async (request, response) => {
     const user  = request.body
-    const userTheme = user.theme == 'dark' ? 'light' : 'dark'
+    const userTheme = user.theme ? 'dark' : 'light'
+
     const theme = await User.findOneAndUpdate({_id: user._id}, {$set: { theme: userTheme}})
     if(theme){
-        return response.send('theme changed')
+        return response.send(userTheme)
     }
     return response.send(false)
 })
