@@ -1,5 +1,4 @@
 const User = require('../models/users')
-const Product = require('../models/products')
 const Wishlist = require('../models/wishlist')
 const AsyncHandler = require('express-async-handler')
 const { today } = require('../data')
