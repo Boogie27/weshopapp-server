@@ -1,6 +1,7 @@
 const User = require('../models/users')
 const Likes = require('../models/likes')
 const Product = require('../models/products')
+const productSeeds = require('../database/product-seeds')
 const AsyncHandler = require('express-async-handler')
 const { today } = require('../data')
 
@@ -65,9 +66,26 @@ const ProductLikeToogle = AsyncHandler(async (request, response) => {
 
 // fetch product in product page
 const FetchProducts = AsyncHandler(async (request, response) => {
+    ProductTableSeeder(true)
     const products = await Product.find({is_featured: 1}).limit(20).exec()
     return response.send(products)
 })
+
+
+
+
+
+
+// query product table with products
+const ProductTableSeeder = (type) => {
+    if(type === true){
+        // const createProducts = Product.create(productSeeds)
+        // if(createProducts){
+        //     return 'products created successfully!'
+        // }
+    }
+}
+
 
 
 
