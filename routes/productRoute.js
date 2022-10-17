@@ -3,7 +3,8 @@ const router = express.Router()
 const { 
     FetchProducts,
     getProductLikes,
-    ProductLikeToogle
+    ProductLikeToogle,
+    FetchProductBySorting
 } = require('../controllers/productController')
 
 
@@ -13,6 +14,9 @@ const {
 router.get('/api/product-likes/:product_id', getProductLikes)
 router.post('/api/product-like-toggle', ProductLikeToogle)
 router.get('/api/fetch-products', FetchProducts)
+router.get('/api/fetch-products-by-sorting/:alphabet/:limit', FetchProductBySorting)
+
+
 
 
 

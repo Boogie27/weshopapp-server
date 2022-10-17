@@ -89,6 +89,22 @@ const ProductTableSeeder = (type) => {
 
 
 
+// fetch products by price filter
+const FetchProductBySorting = AsyncHandler(async (request, response) => {
+    let limit = ''
+    let name = 'ascending'
+    const value = request.params
+    if(value.limit != '-'){
+        limit = value.limit
+    }
+    if(value.alphabet != '-'){
+        name = value.alphabet
+    }
+
+    const products = await Product.find({}).sort({ product_name: name }).limit(limit).exec()
+    console.log(products)
+    return response.send(products)
+})
 
 
 
@@ -96,4 +112,5 @@ module.exports = {
     FetchProducts,
     getProductLikes,
     ProductLikeToogle,
+    FetchProductBySorting,
 }
