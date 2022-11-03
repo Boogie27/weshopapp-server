@@ -54,8 +54,39 @@ const addToWishlist = AsyncHandler(async (request, response) => {
 
 
 
+// delete  wishlist item
+const deleteWishlist = AsyncHandler(async (request, response) => {
+    const {_id, user } = request.body
+    if(user){
+        const userExists = await User.findOne({_id: user._id, is_active: 1}).exec()
+        if(userExists){
+            if(_id == 'delete-all'){
+                const deleteAll =  Wishlist.deleteMany({user: user._id}).exec()
+                if(deleteAll){
+                    return response.send(true)
+                }
+            }else{
+                const exists =  Wishlist.findOne({_id: _id}).exec()
+                if(exists){
+                    const deleteItem =  Wishlist.deleteOne({_id: _id}).exec()
+                    if(deleteItem){
+                        return response.send(true)
+                    }
+                }
+                return response.send(false)
+            }
+        }else{
+            console.log('Error: user does not exists ')
+        }
+    }
+})
+
+
+
+
 
 module.exports = { 
     addToWishlist,
     fetchWishlist,
+    deleteWishlist,
 }
