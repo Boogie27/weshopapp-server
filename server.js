@@ -93,7 +93,7 @@ app.get('/reviews', async (request, response) => {
 // fetch related products
 app.get('/related-products', async (request, response) => {
     let category = request.query.category
-    const relatedProducts = await PRODUCT_MODEL.find({category: category}).exec()
+    const relatedProducts = await PRODUCT_MODEL.find({category: category}).limit(4).exec()
     return response.json({ relatedProducts });
 })
 
