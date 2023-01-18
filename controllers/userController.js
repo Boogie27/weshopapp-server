@@ -244,11 +244,57 @@ const loginValidateInput = (input) => {
 
 
 
+
+// reset user password
+const resetPassword = AsyncHandler( async (request, response) => {
+    const email = request.body.email
+    
+    // validate email input
+    const validation = resetPasswordValidateInput(email)
+    if(validation){
+        return response.json({ validationError: true, validation})
+    }
+
+    const exists = await User.findOne({ email: email })
+    if(!exists){
+        return response.json({ exists: false})
+    }
+
+
+
+})
+
+
+
+
+// validate user input
+const resetPasswordValidateInput = (email) => {
+    let email_alert = ''
+
+    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if(email == ""){
+        email_alert = "*Email field is required"
+    } else if(!email.match(validRegex)){
+        email_alert = "*Invalid email address"
+    }
+
+    if(email_alert.length){
+        return { email: email }
+    }else{
+        return false
+    }
+}
+
+
+
+
+
 module.exports = { 
     getUser,
     loginUser,
     logoutUser,
     registerUser,
+    resetPassword,
     changeUserTheme
 }
 
