@@ -1,6 +1,8 @@
 const User = require('../models/users')
+const ResetPassword = require('../models/ResetPassword')
 const AsyncHandler = require('express-async-handler')
-const { today } = require('../data')
+const { today, url } = require('../data')
+const { SendEmail} = require('../Mailer')
 const bcrypt = require('bcrypt')
 
 
@@ -181,6 +183,7 @@ const logoutUser = AsyncHandler( async (request, response) => {
 
 
 
+// login user
 const loginUser = AsyncHandler( async (request, response) => {
     // validate input
     const { email, password } = request.body
@@ -246,7 +249,7 @@ const loginValidateInput = (input) => {
 
 
 // reset user password
-const resetPassword = AsyncHandler( async (request, response) => {
+const resetPasswordEmail = AsyncHandler( async (request, response) => {
     const email = request.body.email
     
     // validate email input
@@ -260,8 +263,38 @@ const resetPassword = AsyncHandler( async (request, response) => {
         return response.json({ exists: false})
     }
 
+    if(exists){
+        const token = generate_token(exists.user_name)
+        const link = url(`/login?token=${token}`)
 
+        const tokenExists = await ResetPassword.findOne({ email: email })
+        if(tokenExists){
+            const deleteToken = await ResetPassword.deleteOne({_id: tokenExists._id}).exec()
+        }
 
+        const credentials = {
+            email: exists.email,
+            user: exists._id,
+            token: token,
+            created_at: today()
+        }
+        const create = await ResetPassword.create(credentials)
+        if(create){
+            // send email with link
+            emailMessage = {
+                from: 'anonyecharles@gmail.com',
+                to: email,
+                subject: 'first node email',
+                message: 'hello my first node email message!'
+            }
+            const mail = SendEmail(emailMessage)
+            // if(mail){
+            //     return console.log('message sent successfull!')
+            // }
+            // console.log(mail)
+            // return console.log('created successfull!')
+        }
+    }
 })
 
 
@@ -279,7 +312,7 @@ const resetPasswordValidateInput = (email) => {
     }
 
     if(email_alert.length){
-        return { email: email }
+        return { email: email_alert }
     }else{
         return false
     }
@@ -294,7 +327,7 @@ module.exports = {
     loginUser,
     logoutUser,
     registerUser,
-    resetPassword,
+    resetPasswordEmail,
     changeUserTheme
 }
 
