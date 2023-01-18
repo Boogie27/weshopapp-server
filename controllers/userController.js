@@ -1,7 +1,7 @@
 const User = require('../models/users')
 const ResetPassword = require('../models/ResetPassword')
 const AsyncHandler = require('express-async-handler')
-const { today, url } = require('../data')
+const { today, url, senderEmail } = require('../data')
 const { SendEmail} = require('../Mailer')
 const bcrypt = require('bcrypt')
 
@@ -282,17 +282,14 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
         if(create){
             // send email with link
             emailMessage = {
-                from: 'anonyecharles@gmail.com',
+                from: senderEmail.email,
                 to: email,
-                subject: 'first node email',
-                message: 'hello my first node email message!'
+                subject: senderEmail.resetPwdSubject,
+                message: 'hello my first node email message!' + link
             }
             const mail = SendEmail(emailMessage)
-            // if(mail){
-            //     return console.log('message sent successfull!')
-            // }
-            // console.log(mail)
-            // return console.log('created successfull!')
+            
+            return response.json({ data: true})
         }
     }
 })
