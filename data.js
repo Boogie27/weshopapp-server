@@ -1,5 +1,4 @@
 
-
 const today = () => {
     let today = new Date().toISOString()
     return today
@@ -10,10 +9,12 @@ const url = (string) => {
 }
 
 
-const senderEmail = {
-        senderEmail: 'anonyecharles@gmail.com',
-        resetPwdSubject: 'first node email'
-    } 
+// const senderEmail = {
+//         service: 'gmail',
+//         authEmail: 'anonyecharles@gmail.com',
+//         authPassword: 'ijxznuyrdpnwqbnn',
+//         senderEmail: 'anonyecharles@gmail.com',
+//     } 
 
 
 
@@ -29,5 +30,4 @@ module.exports = {
     url,
     today,
     app_name,
-    senderEmail
 }

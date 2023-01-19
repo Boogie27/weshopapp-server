@@ -1,7 +1,7 @@
 const User = require('../models/users')
 const ResetPassword = require('../models/ResetPassword')
 const AsyncHandler = require('express-async-handler')
-const { today, url, senderEmail } = require('../data')
+const { today, url } = require('../data')
 // const { SendEmail} = require('../Mailer')
 const { SendEmail} = require('../handlebars')
 const bcrypt = require('bcrypt')
@@ -266,7 +266,7 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
 
     if(userExists){
         const token = generate_token(userExists.user_name)
-        const link = url(`/login?token=${token}`)
+        const link = url(`/reset-password?token=${token}`)
 
         const tokenExists = await ResetPassword.findOne({ email: email })
         if(tokenExists){
@@ -286,11 +286,10 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
                 link: link,
                 to: email,
                 userName: userExists.user_name,
-                from: senderEmail.email,
                 template: 'ResetPasswordMsg',
-                subject: senderEmail.resetPwdSubject,
+                subject: 'first node email'
             }
-            const mail = SendEmail(emailMessage)
+            // const mail = SendEmail(emailMessage) //send token to email
             
             return response.json({ data: true})
         }

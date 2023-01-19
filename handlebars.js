@@ -2,6 +2,17 @@
 // ******** LINK AT ***** https://www.npmjs.com/package/nodemailer
 // To send HTML email template, install nodemailer-express-handlebars
 // **** LINK AT ***** https://www.npmjs.com/package/nodemailer-express-handlebars
+require('dotenv').config()
+
+
+
+const SERVICE = process.env.SERVICE
+const AUTH_EMAIL = process.env.AUTH_EMAIL
+const AUTH_PASSWORD = process.env.AUTH_PASSWORD
+const SENDER_EMAIL = process.env.SENDER_EMAIL
+const APP_NAME_ONE = process.env.APP_NAME_ONE
+const APP_NAME_TWO = process.env.APP_NAME_TWO
+
 
 
 const path = require('path');
@@ -14,10 +25,10 @@ const { app_name } = require('./data')
 // send email
 const SendEmail = (email) => {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: SERVICE,
         auth: {
-          user: 'anonyecharles@gmail.com',
-          pass: 'ijxznuyrdpnwqbnn'
+          user: AUTH_EMAIL,
+          pass: AUTH_PASSWORD
         }
     });
 
@@ -35,15 +46,15 @@ const SendEmail = (email) => {
     transporter.use('compile', handlebars(options));
 
     const mailOptions = {
-        from: email.from,
+        from: SENDER_EMAIL,
         to: email.to,
         subject: email.subject,
         template: email.template,
         context: {
             link: email.link,
             userName: email.userName,
-            app_name1: app_name.app_name1,
-            app_name2: app_name.app_name2,
+            app_name1: APP_NAME_ONE,
+            app_name2: APP_NAME_TWO,
         }
     };
       
