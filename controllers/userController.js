@@ -9,6 +9,9 @@ const bcrypt = require('bcrypt')
 
 
 
+
+
+// register a user
 const registerUser = AsyncHandler(async (request, response) => {
     const { username, email, password, gender, confirmPassword } = request.body
 
@@ -249,7 +252,7 @@ const loginValidateInput = (input) => {
 
 
 
-// reset user password
+// send reset user password email
 const resetPasswordEmail = AsyncHandler( async (request, response) => {
     const email = request.body.email
     
@@ -289,7 +292,7 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
                 template: 'ResetPasswordMsg',
                 subject: 'first node email'
             }
-            // const mail = SendEmail(emailMessage) //send token to email
+            const mail = SendEmail(emailMessage) //send token to email
             
             return response.json({ data: true})
         }
@@ -321,11 +324,97 @@ const resetPasswordValidateInput = (email) => {
 
 
 
+const resetPassword = AsyncHandler( async (request, response) => {
+    const input = request.body.user_input
+    // reset passowrd form validation
+    const validation = validatePwdResetInput(input)
+    if(validation){
+        return response.json({ validationError: true, validation})
+    }
+
+    const tokenExists = await ResetPassword.findOne({ email: input.email, token: input.token })
+    if(!tokenExists){
+        return response.send({tokenExists: false})
+    }
+
+    const exists = await User.findOne({ _id: tokenExists.user })
+    if(!exists){
+        return response.send({exists: false})
+    }
+
+    const generate_pwd = hashPassword(input.password)
+    const updatePwd = await User.findOneAndUpdate({_id: exists._id}, {$set: { password: generate_pwd }})
+    if(updatePwd){
+        
+        await ResetPassword.findOneAndDelete({_id: tokenExists._id}).exec()
+        return response.send({passwordUpdate: true})
+    }
+    return response.send({passwordUpdate: false})
+})
+
+
+
+
+
+// password rest form vailadation
+const validatePwdResetInput = (input) => {
+    let email = ''
+    let password = ''
+    let confirmPassword = ''
+
+    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if(input.email.length == 0){
+        email = "*Email field is required"
+    } else if(!input.email.match(validRegex)){
+        email = "*Invalid email address"
+    }
+
+    if(input.password.length == 0){
+        password = "*Password field is required"
+    }else if(input.password.length < 6){
+        password = "*Must be minimum of 6 characters"
+    }else if(input.password.length > 12){
+        password = "*Must be maximum of 12 characters"
+    }
+    
+    if(input.confirmPassword.length == 0){
+        confirmPassword = "*Confirm password field is required"
+    }else if(input.confirmPassword != input.password){
+        confirmPassword = "*Password must equal to Confirm password"
+    }
+
+    if(email.length || password.length || confirmPassword.length){
+        return {email: email, password: password, confirmPassword: confirmPassword}
+    }else{
+        return false;
+    }
+}
+
+
+
+
+
+
+// check if passowrd reset token exists in database 
+const checkToken = AsyncHandler( async (request, response) => {
+    const token = request.body.token
+    const tokenExists = await ResetPassword.findOne({ token: token })
+    if(tokenExists){
+        return response.send({tokenExists: true})
+    }
+    return response.send({tokenExists: false})
+})
+
+
+
+
 module.exports = { 
     getUser,
     loginUser,
+    checkToken,
     logoutUser,
     registerUser,
+    resetPassword,
     resetPasswordEmail,
     changeUserTheme
 }
