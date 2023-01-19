@@ -15,8 +15,19 @@ const senderEmail = {
         resetPwdSubject: 'first node email'
     } 
 
+
+
+const app_name = {
+    app_name1: 'WESHOP',
+    app_name2: 'APP'
+}
+
+
+
+
 module.exports = {
     url,
     today,
+    app_name,
     senderEmail
 }

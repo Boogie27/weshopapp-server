@@ -1,3 +1,6 @@
+// To send email, install nodemail
+// To send HTML email template, install nodemailer-express-handlebars
+// **** LINK AT ***** https://www.npmjs.com/package/nodemailer-express-handlebars
 const nodemailer = require('nodemailer');
 
 

@@ -2,7 +2,8 @@ const User = require('../models/users')
 const ResetPassword = require('../models/ResetPassword')
 const AsyncHandler = require('express-async-handler')
 const { today, url, senderEmail } = require('../data')
-const { SendEmail} = require('../Mailer')
+// const { SendEmail} = require('../Mailer')
+const { SendEmail} = require('../handlebars')
 const bcrypt = require('bcrypt')
 
 
@@ -258,13 +259,13 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
         return response.json({ validationError: true, validation})
     }
 
-    const exists = await User.findOne({ email: email })
-    if(!exists){
+    const userExists = await User.findOne({ email: email })
+    if(!userExists){
         return response.json({ exists: false})
     }
 
-    if(exists){
-        const token = generate_token(exists.user_name)
+    if(userExists){
+        const token = generate_token(userExists.user_name)
         const link = url(`/login?token=${token}`)
 
         const tokenExists = await ResetPassword.findOne({ email: email })
@@ -273,8 +274,8 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
         }
 
         const credentials = {
-            email: exists.email,
-            user: exists._id,
+            email: userExists.email,
+            user: userExists._id,
             token: token,
             created_at: today()
         }
@@ -282,10 +283,12 @@ const resetPasswordEmail = AsyncHandler( async (request, response) => {
         if(create){
             // send email with link
             emailMessage = {
-                from: senderEmail.email,
+                link: link,
                 to: email,
+                userName: userExists.user_name,
+                from: senderEmail.email,
+                template: 'ResetPasswordMsg',
                 subject: senderEmail.resetPwdSubject,
-                message: 'hello my first node email message!' + link
             }
             const mail = SendEmail(emailMessage)
             
