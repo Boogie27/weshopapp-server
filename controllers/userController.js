@@ -408,6 +408,21 @@ const checkToken = AsyncHandler( async (request, response) => {
 
 
 
+// delete reset password details from database
+const deleteResetPassword = AsyncHandler( async (request, response) => {
+    const token = request.body.token
+
+    const deleteToken = await ResetPassword.findOneAndDelete({ token: token })
+    if(deleteToken){
+        return response.send({isDeleted: true})
+    }
+    return response.send({isDeleted: false})
+})
+
+
+
+
+
 module.exports = { 
     getUser,
     loginUser,
@@ -416,7 +431,8 @@ module.exports = {
     registerUser,
     resetPassword,
     resetPasswordEmail,
-    changeUserTheme
+    changeUserTheme,
+    deleteResetPassword
 }
 
 

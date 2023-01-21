@@ -8,7 +8,8 @@ const {
     registerUser,
     resetPassword,
     resetPasswordEmail,
-    changeUserTheme
+    changeUserTheme,
+    deleteResetPassword
 } = require('../controllers/userController')
 
 
@@ -27,7 +28,7 @@ router.post('/api/login-user', loginUser)
 router.post('/api/reset-password-email', resetPasswordEmail)
 router.post('/api/reset-password', resetPassword)
 router.post('/api/check-for-token', checkToken)
-
+router.post('/api/delete-reset-password', deleteResetPassword)
 
 
 
