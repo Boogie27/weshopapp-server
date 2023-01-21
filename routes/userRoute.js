@@ -7,6 +7,7 @@ const {
     logoutUser,
     registerUser,
     resetPassword,
+    checkUserToken,
     resetPasswordEmail,
     changeUserTheme,
     deleteResetPassword
@@ -28,6 +29,7 @@ router.post('/api/login-user', loginUser)
 router.post('/api/reset-password-email', resetPasswordEmail)
 router.post('/api/reset-password', resetPassword)
 router.post('/api/check-for-token', checkToken)
+router.post('/api/check-for-user-token', checkUserToken)
 router.post('/api/delete-reset-password', deleteResetPassword)
 
 

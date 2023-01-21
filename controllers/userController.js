@@ -408,6 +408,18 @@ const checkToken = AsyncHandler( async (request, response) => {
 
 
 
+// check if user token exists in database 
+const checkUserToken = AsyncHandler( async (request, response) => {
+    const token = request.body.token
+    const tokenExists = await User.findOne({ token: token, is_active: 1 })
+    if(tokenExists){
+        return response.send({tokenExists: true})
+    }
+    return response.send({tokenExists: false})
+})
+
+
+
 // delete reset password details from database
 const deleteResetPassword = AsyncHandler( async (request, response) => {
     const token = request.body.token
@@ -430,6 +442,7 @@ module.exports = {
     logoutUser,
     registerUser,
     resetPassword,
+    checkUserToken,
     resetPasswordEmail,
     changeUserTheme,
     deleteResetPassword
