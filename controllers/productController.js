@@ -1,6 +1,7 @@
 const User = require('../models/users')
 const Likes = require('../models/likes')
 const Product = require('../models/products')
+const Reviews = require('../models/reviews')
 const productSeeds = require('../database/product-seeds')
 const AsyncHandler = require('express-async-handler')
 const { today } = require('../data')
@@ -108,9 +109,69 @@ const FetchProductBySorting = AsyncHandler(async (request, response) => {
 
 
 
+
+
+// fetch featured products
+const FeaturedProducts = AsyncHandler(async (request, response) => {
+  
+    const featuredProducts = await Product.find({is_featured: 1}).limit(16).exec()
+
+
+    const featured = await Product.aggregate([
+        { $lookup:
+            {
+              from: 'product_reviews',
+              localField: '_id',
+              foreignField: 'product',
+              as: 'reviews'
+            }
+          },
+        {
+            $match: {
+                is_featured: 1
+            }
+        },
+        { $limit: 16 }
+    ]).exec()
+
+    return response.send(featured)
+   
+    return response.send(featuredProducts)
+})
+
+
+
+
+
+//  fetch product stars
+const FetchProductStars = AsyncHandler(async (request, response) => {
+    // const id = request.params.id
+    // const fetchStars = await Reviews.find({ product: '62a9880252a759f59e10d3c5' }).exec()
+    // if(fetchStars){
+    //     // return console.log(fetchStars)
+    // }
+    // return console.log(id)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = { 
     FetchProducts,
     getProductLikes,
+    FeaturedProducts,
+    FetchProductStars,
     ProductLikeToogle,
     FetchProductBySorting,
 }

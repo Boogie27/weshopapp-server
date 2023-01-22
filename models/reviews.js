@@ -3,9 +3,10 @@ const mongoose = require('mongoose')
 
 
 const reviewsSchema  = new mongoose.Schema({
-    product_id: {
-        type: String,
-        required: true
+    product: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'products',
     },
     stars: {
         type: Number,

@@ -16,7 +16,7 @@ const {
 
 
 // **********GET SECTION **********
-router.get('/api/logout', logoutUser)
+router.get('/api/logout/:token', logoutUser)
 
 
 

@@ -54,15 +54,7 @@ app.get('/latest-product', async (request, response) => {
 
 
 
-// fetch featured products
-app.get('/featured-product', async (request, response) => {
-    PRODUCT_MODEL.find({ is_featured: 1}, (error, result) => {
-        if(error){
-            return response.send(error)
-        }
-        return response.send(result)
-    }).limit(6)
-})
+
 
 
 
@@ -82,7 +74,7 @@ app.get('/detail', async (request, response) => {
 // fetch product reviews
 app.get('/reviews', async (request, response) => {
     let product_id = request.query.product_id
-    const reviews = await PRODUCT_REVIEW_MODEL.find({product_id: product_id}).populate(
+    const reviews = await PRODUCT_REVIEW_MODEL.find({product: product_id}).populate(
         'user',
         'first_name last_name image gender is_active'
     )
@@ -101,7 +93,7 @@ app.get('/related-products', async (request, response) => {
 // submit reviews 
 app.post('/submit-review', async (request, response) => {
     const object = request.body
-    const check = await PRODUCT_REVIEW_MODEL.findOne({user: object.user_id, product_id: object.product_id}).exec()
+    const check = await PRODUCT_REVIEW_MODEL.findOne({user: object.user_id, product: object.product_id}).exec()
     const user = await USER_MODEL.findOne({_id: object.user_id}).exec()
     if(!user){
         return response.send('no user')
@@ -111,7 +103,7 @@ app.post('/submit-review', async (request, response) => {
     }
     const review = {
         user: object.user_id,
-        product_id: object.product_id,
+        product: object.product_id,
         stars: object.stars,
         title: object.title,
         reviews: object.reviews,

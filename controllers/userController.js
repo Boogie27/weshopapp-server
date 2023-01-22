@@ -176,8 +176,8 @@ const changeUserTheme = AsyncHandler( async (request, response) => {
 
 //logout user
 const logoutUser = AsyncHandler( async (request, response) => {
-    const id = request.query.id
-    const logout = await User.findOneAndUpdate({_id: id}, {$set: { is_active: 0}})
+    const token = request.query.token
+    const logout = await User.findOneAndUpdate({token: token}, {$set: { is_active: 0}})
     if(logout){
         return response.send(true)
     }
@@ -208,12 +208,7 @@ const loginUser = AsyncHandler( async (request, response) => {
     }
     const loginUser = await User.findOneAndUpdate({_id: exists._id}, {$set: { is_active: 1}}).exec()
     if(loginUser){
-        let options = {
-            maxAge: 1000 * 60 * 60 * 24, // would expire after on day
-            httpOnly: true, // The cookie only accessible by the web server
-            signed: true // Indicates if the cookie should be signed
-        }
-        return response.cookie('weshopapp', exists.token, options).send({data: 'success', user: exists})
+        return response.send({ data: 'success', user: exists })
     }
     return response.send(false)
 })
