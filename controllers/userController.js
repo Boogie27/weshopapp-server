@@ -1,4 +1,5 @@
 const User = require('../models/users')
+const Verification = require('../models/verifications')
 const ResetPassword = require('../models/ResetPassword')
 const AsyncHandler = require('express-async-handler')
 const { today, url } = require('../data')
@@ -40,7 +41,7 @@ const registerUser = AsyncHandler(async (request, response) => {
         token: token,
         gender: gender,
         theme: 'light',
-        is_active: 1,
+        is_active: 0,
         is_verify: 0,
         last_login: today(),
         remember_me: '',
@@ -54,6 +55,7 @@ const registerUser = AsyncHandler(async (request, response) => {
             httpOnly: true, // The cookie only accessible by the web server
             signed: true // Indicates if the cookie should be signed
         }
+
         // send email with link
         const token = generate_token(username)
         const link = url(`/verification?verify=${token}`)
@@ -66,6 +68,16 @@ const registerUser = AsyncHandler(async (request, response) => {
             subject: 'Account Verification'
         }
         const mail = SendEmail(emailMessage) //send token to email
+
+        // find and delete existing verification
+        const deleteVerification = await Verification.findOneAndDelete({ email: email }).exec()
+
+        // create Verification
+        const verify = await Verification.create({
+            email: email,
+            token: token,
+            created_at: today()
+        })
 
         return response.cookie('weshopapp', token, options).send({data: 'success', user: createUser})
     }else{
@@ -443,12 +455,43 @@ const deleteResetPassword = AsyncHandler( async (request, response) => {
 
 
 
+// verify user from database
+const VerifyUser = AsyncHandler( async (request, response) => {
+    const token = request.query.verify
+    const exists = await Verification.findOne({ token: token }).exec()
+    if(exists){
+        const updateUser = await User.findOneAndUpdate({ email: exists.email }, {$set: { is_verify: 1 }}).exec()
+        if(updateUser){
+            const deleteToken = await Verification.findOneAndDelete({ _id: exists._id })
+            return response.send({isVerified: true, username: updateUser.username})
+        }
+    }
+    return response.send({isVerified: false})
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = { 
     getUser,
     loginUser,
     checkToken,
     logoutUser,
+    VerifyUser,
     registerUser,
     resetPassword,
     checkUserToken,

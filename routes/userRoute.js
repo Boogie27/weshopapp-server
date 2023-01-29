@@ -5,6 +5,7 @@ const {
     loginUser,
     checkToken,
     logoutUser,
+    VerifyUser,
     registerUser,
     resetPassword,
     checkUserToken,
@@ -17,6 +18,7 @@ const {
 
 // **********GET SECTION **********
 router.get('/api/logout/:token', logoutUser)
+router.get('/api/verify-user', VerifyUser)
 
 
 
