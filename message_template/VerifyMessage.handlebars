@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Password reset</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+        }
+        body{
+            background-color: rgb(250, 250, 250);
+        }
+        h1, h2, h3, h4, h5, h6, p, li, a{
+            color: #424242;
+            text-decoration: none;
+            font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+            margin: 0px;
+        }
+        .password_reset-forms{
+            position: relative;
+            height: 100vh;
+            padding: 50px 100px;
+            background-color: rgb(250, 250, 250);
+        }
+        .title-header{
+            text-align: center;
+            margin: 20px 0px;
+        }
+        .title-header h3{
+            color: #555;
+        }
+        .password_reset-forms .title-header h3.app-name{
+            color: #555;
+            font-size: 30px;
+            margin: 20px 0px;
+        }
+        .password_reset-forms .title-header h3.app-name span{
+            color: orange;
+        }
+        .greetings h3{
+            font-weight: 300;
+            text-transform: capitalize;
+        }
+        .greetings{
+            font-size: 20px;
+            text-align: left;
+            margin: 20px 0px;
+        }
+        .message-body{
+            padding: 100px 20px;
+            margin: 100px 0px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .message-body p{
+            color: rgb(107, 107, 107);
+        }
+        .greeting-end{
+            margin: 50px 0px;
+        }
+        .link{
+            text-align: center;
+            margin: 50px 0px;
+        }
+        .link a{
+            color: #fff;
+            font-weight: 600;
+            padding: 20px 50px;
+            transition: all 0.4s ease;
+            background-color: rgb(224, 157, 32);
+        }
+        .link a:hover{
+            background-color: rgb(175, 123, 25);
+        }
+        .footer{
+            margin: 0 auto;
+            padding: 20px 0px;
+            position: absolute;
+        }
+        .footer .title-header h3.app-name{
+            font-size: 18px;
+        }
+        .footer .title-header p{
+            font-size: 14px;
+        }
+        .bottom-footer{
+            font-size: 14px;
+            text-align: center;
+            color: rgb(107, 107, 107);
+        }
+        
+        .bottom-footer span{
+            color: orange;
+        }
+        .footer-container{
+            display: flex;
+            justify-content: center;
+        }
+        @media only screen and (max-width: 992px){
+            .password_reset-forms{
+                padding: 0px 50px 0px 50px
+            }
+        }
+        @media only screen and (max-width: 767px){
+            .password_reset-forms{
+                padding: 0px 30px 0px 30px
+            }
+        }
+        @media only screen and (max-width: 567px){
+            .password_reset-forms{
+                padding: 0px 10px
+            }
+        }
+        @media only screen and (max-width: 398px){
+            .bottom-footer{
+                font-size: 11px;
+            }
+            .message-body{
+                padding: 50px 20px;
+            }
+           
+        }
+    </style>
+</head>
+<body>
+    <div class="password_reset-forms">
+        <div class="title-header">
+            <h3 class="app-name">{{ app_name1}}<span>{{ app_name2}}</span></h3>
+            <h4>Verify Account</h4>
+        </div>
+        <div class="message-body">
+            <div class="greetings"><h3>Hello {{ userName }}</h3></div>
+            <p>
+                We received a verifiy account email request. The link to verify your account is here bellow.
+                If you did not make this request please ignore this mail. This token expires after 30 minutes.
+            </p>
+            <div class="link"><a href="{{ link }}">Verify Account</a></div>
+            <p class="greeting-end">
+                Thank you, <br>
+                Weshopapp Team
+            </p>
+        </div>
+        <div class="footer-container">
+            <div class="footer">
+                <div class="title-header">
+                    <h3 class="app-name">WESHOP<span>APP</span></h3>
+                    <p>Send with confidence</p>
+                </div>
+                <div class="bottom-footer">
+                    <p>Made By Eloquent - E-commerce Store <span>©</span> weshop<span>app</span> 2022</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

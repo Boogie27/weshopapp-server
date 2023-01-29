@@ -41,6 +41,7 @@ const registerUser = AsyncHandler(async (request, response) => {
         gender: gender,
         theme: 'light',
         is_active: 1,
+        is_verify: 0,
         last_login: today(),
         remember_me: '',
         created_at: today()
@@ -53,6 +54,19 @@ const registerUser = AsyncHandler(async (request, response) => {
             httpOnly: true, // The cookie only accessible by the web server
             signed: true // Indicates if the cookie should be signed
         }
+        // send email with link
+        const token = generate_token(username)
+        const link = url(`/verification?verify=${token}`)
+
+        emailMessage = {
+            link: link,
+            to: email,
+            userName: username,
+            template: 'VerifyMessage',
+            subject: 'Account Verification'
+        }
+        const mail = SendEmail(emailMessage) //send token to email
+
         return response.cookie('weshopapp', token, options).send({data: 'success', user: createUser})
     }else{
         response.status(400)

@@ -40,6 +40,10 @@ const UserSchema  = new mongoose.Schema({
         type: Number,
         required: true
     },
+    is_verify: {
+        type: Number,
+        required: true
+    },
     theme: {
         type: String,
         required: true
