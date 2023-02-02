@@ -224,7 +224,7 @@ const loginUser = AsyncHandler( async (request, response) => {
 
     const exists = await User.findOne({ email: email })
     if(!exists){
-        return response.send(false)
+        return response.send({exists: false})
     }
     
     // compare password
@@ -232,6 +232,34 @@ const loginUser = AsyncHandler( async (request, response) => {
     if(!comparePassword){
         return response.send(false)
     }
+
+    // check if user is verified
+    if(exists.is_verify == 0){
+        // send email with link
+        const token = generate_token(exists.user_name)
+        const link = url(`/verification?verify=${token}`)
+
+        emailMessage = {
+            link: link,
+            to: email,
+            userName: exists.user_name,
+            template: 'VerifyMessage',
+            subject: 'Account Verification'
+        }
+        const mail = SendEmail(emailMessage) //send token to email
+        
+        // find and delete existing verification
+        const deleteVerification = await Verification.findOneAndDelete({ email: email }).exec()
+
+        // create Verification
+        const verify = await Verification.create({
+            email: email,
+            token: token,
+            created_at: today()
+        })
+        return response.send({verify: 'not-verified'})
+    }
+
     const loginUser = await User.findOneAndUpdate({_id: exists._id}, {$set: { is_active: 1}}).exec()
     if(loginUser){
         return response.send({ data: 'success', user: exists })
@@ -463,7 +491,7 @@ const VerifyUser = AsyncHandler( async (request, response) => {
         const updateUser = await User.findOneAndUpdate({ email: exists.email }, {$set: { is_verify: 1 }}).exec()
         if(updateUser){
             const deleteToken = await Verification.findOneAndDelete({ _id: exists._id })
-            return response.send({isVerified: true, username: updateUser.username})
+            return response.send({isVerified: true, username: updateUser.user_name})
         }
     }
     return response.send({isVerified: false})
