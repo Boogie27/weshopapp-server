@@ -224,13 +224,13 @@ const loginUser = AsyncHandler( async (request, response) => {
 
     const exists = await User.findOne({ email: email })
     if(!exists){
-        return response.send({exists: false})
+        return response.send({ exists: false })
     }
     
     // compare password
     const comparePassword = await bcrypt.compare(password, exists.password)
     if(!comparePassword){
-        return response.send(false)
+        return response.send({ exists: false })
     }
 
     // check if user is verified
