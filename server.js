@@ -8,6 +8,7 @@ const PRODUCT_MODEL = require('./models/products')
 const PRODUCT_REVIEW_MODEL = require('./models/reviews')
 
 const userRoute = require('./routes/userRoute') 
+const orderRoute = require('./routes/orderRoute') 
 const cartRoute = require('./routes/cartRoute') 
 const getUserRoute = require('./routes/getUserRoute') 
 const productRoute = require('./routes/productRoute') 
@@ -165,7 +166,8 @@ app.use(cartRoute)
 // wishlist route
 app.use(wishlistRoute)
 
-
+// order route
+app.use(orderRoute)
 
 
 
